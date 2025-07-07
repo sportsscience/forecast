@@ -258,56 +258,58 @@
         
         <!-- ====================== PAGE 1: INITIAL INFO ====================== -->
         <div id="initial-page" class="page">
-            <h1>GPA Calculator</h1>
+            <h1>โปรแกรมวิเคราะห์เกรดล่วงหน้า</h1>
             <form id="initial-form">
-                <h2>Personal Information</h2>
+                <h2>ข้อมูลส่วนบุคคล</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="fullName">Full Name</label>
+                        <label for="fullName">ชื่อ-นามสกุล</label>
                         <input type="text" id="fullName" required>
                     </div>
                     <div class="form-group">
-                        <label for="studentId">Student ID Number</label>
+                        <label for="studentId">รหัสนักศึกษา</label>
                         <input type="text" id="studentId" required>
                     </div>
                     <div class="form-group">
-                        <label for="yearLevel">Year Level</label>
+                        <label for="yearLevel">ระดับชั้นปีปัจจุบัน</label>
                         <input type="text" id="yearLevel" required>
                     </div>
                 </div>
 
-                <h2>Current GPA Calculation</h2>
+                <h2>การคำนวณ GPA ปัจจุบัน</h2>
                 <div class="form-grid">
                     <div class="form-group">
-                        <label for="accumulatedCredits">Accumulated Credits
-                            <small>Total number of credits you have completed.</small>
+                        <label for="accumulatedCredits">หน่วยกิตสะสม
+                            <small>จำนวนหน่วยกิตทั้งหมดที่คุณได้เรียนผ่านมา ให้ดูที่ระบบ my.ku.th</small>
                         </label>
                         <input type="number" id="accumulatedCredits" step="1" min="0" required>
                     </div>
                     <div class="form-group">
-                        <label for="latestGpa">Latest Cumulative GPA</label>
+                        <label for="latestGpa">GPA สะสมล่าสุด
+                            <small>จำนวน GPA ทั้งหมดที่คุณได้เรียนผ่านมา ให้ดูที่ระบบ my.ku.th</small>
+                        </label>
                         <input type="number" id="latestGpa" step="0.01" min="0" max="4.00" required>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary no-print">Calculate Status</button>
+                <button type="submit" class="btn btn-primary no-print">คำนวณสถานะ</button>
             </form>
             <div id="initial-result-display" style="display: none;"></div>
         </div>
 
         <!-- ====================== PAGE 2: GPA FORECAST ====================== -->
         <div id="forecast-page" class="page hidden">
-            <h2>Future Term GPA Forecast</h2>
-            <p>Enter the subjects for the upcoming term. Click '+' to add more subjects.</p>
+            <h2>การคาดการณ์ GPA สำหรับภาคการศึกษาถัดไป</h2>
+            <p>กรุณาใส่ข้อมูลวิชาสำหรับภาคการศึกษาที่จะถึงนี้ คลิก '+' เพื่อเพิ่มวิชาเพิ่มเติม</p>
             <form id="forecast-form">
                 <table>
                     <thead>
                         <tr>
-                            <th>Subject Code</th>
-                            <th>Subject Name</th>
-                            <th>Credit</th>
-                            <th>Grade</th>
-                            <th>Grade Point</th>
-                            <th>Total Score</th>
+                            <th>รหัสวิชา</th>
+                            <th>ชื่อวิชา</th>
+                            <th>หน่วยกิต</th>
+                            <th>เกรด</th>
+                            <th>คะแนนเกรด</th>
+                            <th>คะแนนรวม</th>
                         </tr>
                     </thead>
                     <tbody id="forecast-table-body">
@@ -316,7 +318,7 @@
                 </table>
                  <div class="forecast-controls no-print">
                     <button type="button" id="add-row-btn" class="btn btn-add">+</button>
-                    <button type="button" id="calculate-btn" class="btn btn-primary">Calculate Future GPA</button>
+                    <button type="button" id="calculate-btn" class="btn btn-primary">คำนวณ GPA ในอนาคต</button>
                 </div>
             </form>
         </div>
@@ -371,10 +373,10 @@
          * @returns {{text: string, class: string}} The student status object.
          */
         function getStudentStatus(gpa) {
-            if (gpa >= 2.00) return { text: 'Normal', class: 'status-normal' };
-            if (gpa >= 1.75) return { text: 'Probation Level 1 (GPAX 1.75–1.99)', class: 'status-prob1' };
-            if (gpa >= 1.50) return { text: 'Probation Level 2 (GPAX 1.50–1.74)', class: 'status-prob2' };
-            return { text: 'Dismissal Risk (GPAX < 1.50)', class: 'status-dismissed' };
+            if (gpa >= 2.00) return { text: 'สถานะปกติ', class: 'status-normal' };
+            if (gpa >= 1.75) return { text: 'สถานะติดโปรสูง (GPAX 1.75–1.99)', class: 'status-prob1' };
+            if (gpa >= 1.50) return { text: 'สถานะติดโปรต่ำ (GPAX 1.50–1.74)', class: 'status-prob2' };
+            return { text: 'ความเสี่ยงในการถูกไล่ออก (GPAX < 1.50)', class: 'status-dismissed' };
         }
 
         /**
@@ -424,15 +426,15 @@
             initialResultDisplay.innerHTML = `
                 <div class="result-box">
                     <p><strong>GPA Score (Total Points):</strong> ${score.toFixed(2)}</p>
-                    <p><strong>Current Status:</strong> <span class="status-text ${status.class}">${status.text}</span></p>
+                    <p><strong>สถานะปัจจุบัน:</strong> <span class="status-text ${status.class}">${status.text}</span></p>
                 </div>
             `;
             initialResultDisplay.style.display = 'block';
 
             setTimeout(() => {
-                showModal('Would you like to forecast your future GPA?', [
-                    { text: 'Yes', class: 'btn-primary', onClick: switchToForecastPage },
-                    { text: 'No', class: 'btn-secondary', onClick: () => {} }
+                showModal('คุณต้องการคาดการณ์ GPA ของคุณหรือไม่?', [
+                    { text: 'ใช่', class: 'btn-primary', onClick: switchToForecastPage },
+                    { text: 'ไม่', class: 'btn-secondary', onClick: () => {} }
                 ]);
             }, 500);
         });
@@ -452,7 +454,7 @@
         function addNewForecastRow() {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td><input type="text" class="subject-code" placeholder="e.g., CS101"></td>
+                <td><input type="text" class="subject-code" placeholder="e.g., 02301145"></td>
                 <td><input type="text" class="subject-name" placeholder="e.g., Intro to Programming"></td>
                 <td><input type="number" class="credit" min="0" step="1"></td>
                 <td>
@@ -502,7 +504,7 @@
             let termScoreSum = 0;
             const forecastRows = forecastTableBody.querySelectorAll('tr');
 
-            let forecastTableHTML = '<table><thead><tr><th>Subject Code</th><th>Subject Name</th><th>Credit</th><th>Grade</th><th>Grade Point</th><th>Score</th></tr></thead><tbody>';
+            let forecastTableHTML = '<table><thead><tr><th>รหัสวิชา</th><th>ชื่อวิชา</th><th>หน่วยกิต</th><th>เกรด</th><th>คะแนนเกรด</th><th>คะแนนรวม</th></tr></thead><tbody>';
             forecastRows.forEach(row => {
                 const credit = parseFloat(row.querySelector('.credit').value) || 0;
                 const score = parseFloat(row.querySelector('.total-score').value) || 0;
@@ -539,25 +541,25 @@
                     <p><strong>Year Level:</strong> ${studentData.yearLevel}</p>
                 </div>
 
-                <h3>Previous Academic Status</h3>
+                <h3>สถานะภาพทางการศึกษา</h3>
                 <div class="result-box">
-                    <p><strong>Previous Accumulated Credits:</strong> ${studentData.previousCredits}</p>
-                    <p><strong>Previous GPA:</strong> ${studentData.previousGpa.toFixed(2)}</p>
+                    <p><strong>หน่วยกิตที่สะสมก่อนหน้า:</strong> ${studentData.previousCredits}</p>
+                    <p><strong>GPA ก่อนหน้า:</strong> ${studentData.previousGpa.toFixed(2)}</p>
                 </div>
-                
-                <h3>Future Term Forecast Details</h3>
+
+                <h3>รายละเอียดการคาดการณ์ภาคการศึกษาถัดไป</h3>
                 ${forecastTableHTML}
-                
-                <h3>Final Projected Results</h3>
+
+                <h3>ผลลัพธ์ที่คาดการณ์ไว้สุดท้าย</h3>
                 <div class="result-box">
-                    <p><strong>Term GPA:</strong> ${termGpa.toFixed(2)}</p>
-                    <p><strong>Credits This Term:</strong> ${termCredits}</p>
-                    <p><strong>New Cumulative GPA (GPAX):</strong> <span style="font-size: 1.2em; font-weight: bold; color: var(--primary-color);">${newGpax.toFixed(2)}</span></p>
-                    <p><strong>New Student Status:</strong> <span class="status-text ${newStatus.class}">${newStatus.text}</span></p>
+                    <p><strong>คะแนน GPA เทอมอนาคต:</strong> ${termGpa.toFixed(2)}</p>
+                    <p><strong>หน่วยกิตรวมเทอมอนาคต:</strong> ${termCredits}</p>
+                    <p><strong>คำนวณ GPA (GPAX)รวม:</strong> <span style="font-size: 1.2em; font-weight: bold; color: var(--primary-color);">${newGpax.toFixed(2)}</span></p>
+                    <p><strong>สถานะในอนาคตที่คาดว่าจะเป็น:</strong> <span class="status-text ${newStatus.class}">${newStatus.text}</span></p>
                 </div>
 
                 <br>
-                <button onclick="window.print()" class="btn btn-primary no-print" style="width: 100%;">Print Full Report</button>
+                <button onclick="window.print()" class="btn btn-primary no-print" style="width: 100%;">พิมพ์รายงาน</button>
             `;
             
             forecastPage.classList.add('hidden');
